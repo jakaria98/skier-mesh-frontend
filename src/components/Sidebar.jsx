@@ -32,8 +32,19 @@ const Sidebar = ({
     const [numOnDisplay, setNumOnDisplay] = useState(0);
 
     useEffect(() => {
+        console.log(typeof paths);
+        const modifiedPathArray = [];
+        if (!Array.isArray(paths)) {
+            const pathArray0 = paths.slopes;
+            for (let i = 0; i < pathArray0.length; i++) {
+                modifiedPathArray.push(' ');
+                modifiedPathArray.push(pathArray0[i]);
+            }
+        }
         if (paths && paths[numOnDisplay]) {
             selectSlopesOnMap(paths[numOnDisplay].filter((item, index) => index % 2 == 1));
+        } else {
+            selectSlopesOnMap(modifiedPathArray.filter((item, index) => index % 2 == 1));
         }
     }, [paths, numOnDisplay]);
 
@@ -223,12 +234,14 @@ const Sidebar = ({
                         )}
                     </Tabs>
                 </Box>
-                {paths && Array.isArray(paths)
-                    ? paths.map(
-                          (path, index) =>
-                              numOnDisplay == index && <PathDetail path={path} key={path._id} />
-                      )
-                    : (console.log(paths), (<PathDetail path={paths} />))}
+                {paths && Array.isArray(paths) ? (
+                    paths.map(
+                        (path, index) =>
+                            numOnDisplay == index && <PathDetail path={path} key={path._id} />
+                    )
+                ) : (
+                    <PathDetail path={paths} />
+                )}
             </Grid>
         </Grid>
     );
