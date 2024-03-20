@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Sidebar from '../components/Sidebar'
@@ -43,6 +43,9 @@ function HomePage() {
   const [waypoints, setWaypoints] = useState([])
   //const [lifts, setLifts] = useState([])
   const [slopes, setSlopes] = useState([])
+  const clearedSlopes = useRef([])
+  const [startingPoint, setStartingPoint] = useState()
+  const [destination, setDestination] = useState()
   useEffect(() => {
     WaypointsService.getWaypoints()
       .then(r => setWaypoints(r.data))
@@ -51,7 +54,10 @@ function HomePage() {
   }, [])
   useEffect(() => {
     SlopesService.getSlopes()
-      .then(r => setSlopes(r.data))
+      .then(r => {
+        setSlopes(r.data)
+        clearedSlopes.current = r.data
+      })
       .catch(console.error)
   }, [])
   /* useEffect(() => {
@@ -78,45 +84,57 @@ function HomePage() {
       },
     ])
   }, []) */
+
+  const selectSlopeOnMap = slope => {
+    setSlopes(
+      slopes.map(s =>
+        s._id == slope._id ? { ...slope, selected: true } : slope
+      )
+    )
+  }
+  const clearSlopesOnMap = () => {
+    setSlopes(clearedSlopes.current)
+  }
+
   return (
     <>
-      <Sidebar />
-      <div className='container-fluid'>
-        <h2 className='text-center mt-5'>Welcome to Skier Mesh</h2>
-        <main className='d-flex justify-content-center align-items-center vh-100'>
-          <div>
-            <div style={{ height: '550px', width: '800px' }}>
-              <MapContainer
-                center={center}
-                zoom={16}
-                scrollWheelZoom={true}
-                style={{ height: '900px', width: '1200px' }}
-                maxBounds={maxBounds}
-                maxBoundsViscosity={1}
-              >
-                {/*<TileLayer
+      <Header />
+      <main>
+        <MapContainer
+          center={center}
+          zoom={16}
+          scrollWheelZoom={true}
+          style={{ height: '900px', width: '1200px' }}
+          maxBounds={maxBounds}
+          maxBoundsViscosity={1}
+        >
+          {/*<TileLayer
             nowrap={true}
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           />*/}
-                <ImageOverlay
-                  url={
-                    'https://jamesniehues.com/cdn/shop/products/199.1_CottonwoodCanyons2001Book_Feb_1_19.jpg'
-                  }
-                  bounds={maxBounds}
-                  opacity={1}
-                />
-                {waypoints &&
-                  waypoints.map(waypoint => (
-                    <Marker key={waypoint.name} position={waypoint.coordinates}>
-                      <Popup>
-                        <WaypointDetail waypoint={waypoint} />
-                        <button>Start from here</button>
-                        <button>Get here</button>
-                      </Popup>
-                    </Marker>
-                  ))}
-                {/* {lifts.map(lift => (
+          <ImageOverlay
+            url={
+              'https://jamesniehues.com/cdn/shop/products/199.1_CottonwoodCanyons2001Book_Feb_1_19.jpg'
+            }
+            bounds={maxBounds}
+            opacity={1}
+          />
+          {waypoints &&
+            waypoints.map(waypoint => (
+              <Marker key={waypoint.name} position={waypoint.coordinates}>
+                <Popup>
+                  <WaypointDetail waypoint={waypoint} />
+                  <button onClick={() => setStartingPoint(waypoint)}>
+                    Start from here
+                  </button>
+                  <button onClick={() => setDestination(waypoint)}>
+                    Get here
+                  </button>
+                </Popup>
+              </Marker>
+            ))}
+          {/* {lifts.map(lift => (
             <Polyline
               key={lift.liftID}
               pathOptions={{ color: 'green' }}
@@ -128,38 +146,41 @@ function HomePage() {
               </Popup>
             </Polyline>
           ))} */}
-                {slopes &&
-                  slopes.map(slope => (
-                    <Polyline
-                      key={slope.id}
-                      pathOptions={
-                        slope.selected
-                          ? {
-                              color: colorMap[slope.difficultyLevel],
-                              weight: '15',
-                            }
-                          : {
-                              color: colorMap[slope.difficultyLevel],
-                              opacity: '0.5',
-                              weight: '10',
-                            }
+          {slopes &&
+            slopes.map(slope => (
+              <Polyline
+                key={slope.id}
+                pathOptions={
+                  slope.selected
+                    ? {
+                        color: colorMap[slope.difficultyLevel],
+                        weight: '15',
                       }
-                      positions={[
-                        slope.start.coordinates,
-                        slope.end.coordinates,
-                      ]}
-                    >
-                      <Popup style={{ display: 'inline-block' }}>
-                        <SlopeDetail slope={slope} />
-                      </Popup>
-                    </Polyline>
-                  ))}
-              </MapContainer>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
+                    : {
+                        color: colorMap[slope.difficultyLevel],
+                        opacity: '0.3',
+                        weight: '10',
+                      }
+                }
+                positions={[slope.start.coordinates, slope.end.coordinates]}
+              >
+                <Popup style={{ display: 'inline-block' }}>
+                  <SlopeDetail slope={slope} />
+                </Popup>
+              </Polyline>
+            ))}
+        </MapContainer>
+        <Sidebar
+          selectSlopeOnMap={selectSlopeOnMap}
+          clearSlopesOnMap={clearSlopesOnMap}
+          waypoints={waypoints}
+          startingPoint={startingPoint}
+          setStartingPoint={setStartingPoint}
+          destination={destination}
+          setDestination={setDestination}
+        />
+      </main>
+      <Footer />
     </>
   )
 }
