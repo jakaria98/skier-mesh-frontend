@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import Sidebar from '../components/Sidebar'
 import {
   MapContainer,
   //  TileLayer,
@@ -78,41 +79,44 @@ function HomePage() {
     ])
   }, []) */
   return (
-    <div>
-      <Header />
-      <main>
-        <h2>Welcome to Skier Mesh</h2>
-        <MapContainer
-          center={center}
-          zoom={16}
-          scrollWheelZoom={true}
-          style={{ height: '900px', width: '1200px' }}
-          maxBounds={maxBounds}
-          maxBoundsViscosity={1}
-        >
-          {/*<TileLayer
+    <>
+      <Sidebar />
+      <div className='container-fluid'>
+        <h2 className='text-center mt-5'>Welcome to Skier Mesh</h2>
+        <main className='d-flex justify-content-center align-items-center vh-100'>
+          <div>
+            <div style={{ height: '550px', width: '800px' }}>
+              <MapContainer
+                center={center}
+                zoom={16}
+                scrollWheelZoom={true}
+                style={{ height: '900px', width: '1200px' }}
+                maxBounds={maxBounds}
+                maxBoundsViscosity={1}
+              >
+                {/*<TileLayer
             nowrap={true}
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           />*/}
-          <ImageOverlay
-            url={
-              'https://jamesniehues.com/cdn/shop/products/199.1_CottonwoodCanyons2001Book_Feb_1_19.jpg'
-            }
-            bounds={maxBounds}
-            opacity={1}
-          />
-          {waypoints &&
-            waypoints.map(waypoint => (
-              <Marker key={waypoint.name} position={waypoint.coordinates}>
-                <Popup>
-                  <WaypointDetail waypoint={waypoint} />
-                  <button>Start from here</button>
-                  <button>Get here</button>
-                </Popup>
-              </Marker>
-            ))}
-          {/* {lifts.map(lift => (
+                <ImageOverlay
+                  url={
+                    'https://jamesniehues.com/cdn/shop/products/199.1_CottonwoodCanyons2001Book_Feb_1_19.jpg'
+                  }
+                  bounds={maxBounds}
+                  opacity={1}
+                />
+                {waypoints &&
+                  waypoints.map(waypoint => (
+                    <Marker key={waypoint.name} position={waypoint.coordinates}>
+                      <Popup>
+                        <WaypointDetail waypoint={waypoint} />
+                        <button>Start from here</button>
+                        <button>Get here</button>
+                      </Popup>
+                    </Marker>
+                  ))}
+                {/* {lifts.map(lift => (
             <Polyline
               key={lift.liftID}
               pathOptions={{ color: 'green' }}
@@ -124,33 +128,39 @@ function HomePage() {
               </Popup>
             </Polyline>
           ))} */}
-          {slopes &&
-            slopes.map(slope => (
-              <Polyline
-                key={slope.id}
-                pathOptions={
-                  slope.selected
-                    ? {
-                        color: colorMap[slope.difficultyLevel],
-                        weight: '15',
+                {slopes &&
+                  slopes.map(slope => (
+                    <Polyline
+                      key={slope.id}
+                      pathOptions={
+                        slope.selected
+                          ? {
+                              color: colorMap[slope.difficultyLevel],
+                              weight: '15',
+                            }
+                          : {
+                              color: colorMap[slope.difficultyLevel],
+                              opacity: '0.5',
+                              weight: '10',
+                            }
                       }
-                    : {
-                        color: colorMap[slope.difficultyLevel],
-                        opacity: '0.5',
-                        weight: '10',
-                      }
-                }
-                positions={[slope.start.coordinates, slope.end.coordinates]}
-              >
-                <Popup style={{ display: 'inline-block' }}>
-                  <SlopeDetail slope={slope} />
-                </Popup>
-              </Polyline>
-            ))}
-        </MapContainer>
-      </main>
-      <Footer />
-    </div>
+                      positions={[
+                        slope.start.coordinates,
+                        slope.end.coordinates,
+                      ]}
+                    >
+                      <Popup style={{ display: 'inline-block' }}>
+                        <SlopeDetail slope={slope} />
+                      </Popup>
+                    </Polyline>
+                  ))}
+              </MapContainer>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    </>
   )
 }
 
