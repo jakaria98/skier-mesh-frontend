@@ -1,9 +1,14 @@
-# Skier Mesh
-
-Frontend codebase for Skier Mesh web app
+# Skier-Mesh-Backend
+Frontend codebase for Skier Mesh web application
 
 1. Install with
-   npm install
+
+```
+npm install
+```
 
 2. Run with
-   npm run dev
+
+```
+npm run dev
+```
