@@ -18,16 +18,14 @@ import {
   Polyline,
 } from 'react-leaflet'
 import WaypointDetail from './sub/WaypointDetail'
-//import LiftDetail from './sub/LiftDetail'
 import SlopeDetail from './sub/SlopeDetail'
 import WaypointsService from '../services/WaypointsService'
-//import LiftsService from '../services/LiftsService'
 import SlopesService from '../services/SlopesService'
 
 function HomePage() {
   const maxBounds = [
-    [27.982, 86.918],
-    [27.995, 86.932],
+    [27, 86],
+    [28, 87],
   ]
   const center = [
     (maxBounds[0][0] + maxBounds[1][0]) / 2,
@@ -47,7 +45,6 @@ function HomePage() {
     Level3: 'black',
   }
   const [waypoints, setWaypoints] = useState([])
-  //const [lifts, setLifts] = useState([])
   const [slopes, setSlopes] = useState([])
   const [startingPoint, setStartingPoint] = useState()
   const [destination, setDestination] = useState()
@@ -107,7 +104,7 @@ function HomePage() {
               <Paper variant='outlined' sx={{ m: 1, height: '100%' }}>
                 <MapContainer
                   center={center}
-                  zoom={16}
+                  zoom={9.5}
                   scrollWheelZoom={true}
                   style={{ minHeight: '60vh', height: '100%' }}
                   maxBounds={maxBounds}
