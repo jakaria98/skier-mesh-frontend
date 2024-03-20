@@ -2,7 +2,7 @@ import { Navbar, Nav } from 'react-bootstrap';
 
 const CustomNavbar = () => {
     return (
-        <Navbar bg="light" expand="lg" style={{ height: '100px', width:"100%" }}>
+        <Navbar bg="light" expand="lg">
             <Navbar.Brand href="#home">Navbar</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav" className="justify-content-center">

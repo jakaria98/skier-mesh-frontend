@@ -56,8 +56,8 @@ const Sidebar = ({
             label={startingPoint ? startingPoint.name : ''}
             onChange={event => setStartingPoint(event.target.value)}
           >
-            {waypoints.map(waypoint => (
-              <MenuItem key={waypoint.id} value={waypoint}>
+            {waypoints.map((waypoint) => (
+              <MenuItem key={waypoint._id} value={waypoint}>
                 <em>{waypoint.name}</em>
               </MenuItem>
             ))}
@@ -75,7 +75,7 @@ const Sidebar = ({
             onChange={event => setDestination(event.target.value)}
           >
             {waypoints.map(waypoint => (
-              <MenuItem key={waypoint.id} value={waypoint}>
+              <MenuItem key={waypoint._id} value={waypoint}>
                 <em>{waypoint.name}</em>
               </MenuItem>
             ))}
@@ -94,6 +94,7 @@ const Sidebar = ({
               endId: destination._id,
             })
               .then(r => {
+                console.log(r)
                 setNumOnDisplay(0)
                 setPaths(r.data)
               })
