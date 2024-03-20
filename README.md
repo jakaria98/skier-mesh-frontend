@@ -1,4 +1,4 @@
-# Skier-Mesh-Backend
+# Skier-Mesh-Frontend
 Frontend codebase for Skier Mesh web application
 
 1. Install with
