@@ -12,6 +12,7 @@ import {
 } from 'react-leaflet';
 import WaypointDetail from './sub/WaypointDetail';
 import LiftDetail from './sub/LiftDetail';
+import Sidebar from '../components/Sidebar';
 
 function HomePage() {
     const maxBounds = [
@@ -59,50 +60,53 @@ function HomePage() {
         ]);
     }, []);
     return (
-        <div className="container-fluid">
-            <h2 className="text-center mt-5">Welcome to Skier Mesh</h2>
-            <main className="d-flex justify-content-center align-items-center vh-100">
-                <div>
-                    <div style={{ height: '550px', width: '800px' }}>
-                        <MapContainer
-                            center={center}
-                            zoom={8}
-                            scrollWheelZoom={true}
-                            style={{ height: '100%', width: '100%' }}
-                            maxBounds={maxBounds}
-                            maxBoundsViscosity={1}
-                        >
-                            <ImageOverlay
-                                url={
-                                    'https://jamesniehues.com/cdn/shop/products/199.1_CottonwoodCanyons2001Book_Feb_1_19.jpg'
-                                }
-                                bounds={maxBounds}
-                                opacity={1}
-                            />
-                            {waypoints.map((waypoint) => (
-                                <Marker key={waypoint.name} position={waypoint.coordinate}>
-                                    <Popup>
-                                        <WaypointDetail waypoint={waypoint} />
-                                    </Popup>
-                                </Marker>
-                            ))}
-                            {lifts.map((lift) => (
-                                <Polyline
-                                    key={lift.liftID}
-                                    pathOptions={{ color: 'green' }}
-                                    positions={lift.waypoints.map((w) => w.coordinate)}
-                                >
-                                    <Popup style={{ display: 'inline-block' }}>
-                                        <LiftDetail lift={lift} />
-                                    </Popup>
-                                </Polyline>
-                            ))}
-                        </MapContainer>
+        <>
+        <Sidebar />
+            <div className="container-fluid">
+                <h2 className="text-center mt-5">Welcome to Skier Mesh</h2>
+                <main className="d-flex justify-content-center align-items-center vh-100">
+                    <div>
+                        <div style={{ height: '550px', width: '800px' }}>
+                            <MapContainer
+                                center={center}
+                                zoom={8}
+                                scrollWheelZoom={true}
+                                style={{ height: '100%', width: '100%' }}
+                                maxBounds={maxBounds}
+                                maxBoundsViscosity={1}
+                            >
+                                <ImageOverlay
+                                    url={
+                                        'https://jamesniehues.com/cdn/shop/products/199.1_CottonwoodCanyons2001Book_Feb_1_19.jpg'
+                                    }
+                                    bounds={maxBounds}
+                                    opacity={1}
+                                />
+                                {waypoints.map((waypoint) => (
+                                    <Marker key={waypoint.name} position={waypoint.coordinate}>
+                                        <Popup>
+                                            <WaypointDetail waypoint={waypoint} />
+                                        </Popup>
+                                    </Marker>
+                                ))}
+                                {lifts.map((lift) => (
+                                    <Polyline
+                                        key={lift.liftID}
+                                        pathOptions={{ color: 'green' }}
+                                        positions={lift.waypoints.map((w) => w.coordinate)}
+                                    >
+                                        <Popup style={{ display: 'inline-block' }}>
+                                            <LiftDetail lift={lift} />
+                                        </Popup>
+                                    </Polyline>
+                                ))}
+                            </MapContainer>
+                        </div>
                     </div>
-                </div>
-            </main>
-            <Footer />
-        </div>
+                </main>
+                <Footer />
+            </div>
+        </>
     );
 }
 
