@@ -1,0 +1,8 @@
+###
+POST http://localhost:3000/api/waypoints/allPaths HTTP/1.1
+content-type: application/json
+
+{
+    "startId": "65f8cc6494ea3eb4a1f7f3d5",
+    "endId": "65f8cd5894ea3eb4a1f7f3e1"
+}
