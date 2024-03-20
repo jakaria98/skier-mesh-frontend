@@ -49,7 +49,6 @@ function HomePage() {
   const [waypoints, setWaypoints] = useState([])
   //const [lifts, setLifts] = useState([])
   const [slopes, setSlopes] = useState([])
-  const clearedSlopes = useRef([])
   const [startingPoint, setStartingPoint] = useState()
   const [destination, setDestination] = useState()
   useEffect(() => {
@@ -61,8 +60,7 @@ function HomePage() {
   useEffect(() => {
     SlopesService.getSlopes()
       .then(r => {
-        setSlopes(r.data)
-        clearedSlopes.current = r.data
+        setSlopes(r.data.map(s => ({ ...s, selected: false })))
       })
       .catch(console.error)
   }, [])
@@ -91,22 +89,19 @@ function HomePage() {
     ])
   }, []) */
 
-  const selectSlopeOnMap = slope => {
-    setSlopes(
-      slopes.map(s =>
-        s._id == slope._id ? { ...slope, selected: true } : slope
-      )
-    )
+  const selectSlopesOnMap = async targets => {
+    const ids = targets.map(t => t._id)
+    await setSlopes(slopes.map(slope => ids.includes(slope._id) ? {...slope, selected:true} : slope))
   }
-  const clearSlopesOnMap = () => {
-    setSlopes(clearedSlopes.current)
+  const clearSlopesOnMap = async () => {
+    await setSlopes(slopes.map(s => ({ ...s, selected: false })))
   }
 
   return (
     <>
-      <Stack spacing={2} justifyContent={'center'}>
+      <Stack justifyContent={'center'} alignItems={'center'}>
         <Header />
-        <main>
+        <main style={{width:"100%"}}>
           <Grid container rowSpacing={1} sx={{ minHeight: '60vh', p: 5 }}>
             <Grid item xs={12} md={8}>
               <Paper variant='outlined' sx={{ m: 1, height: '100%' }}>
@@ -117,6 +112,7 @@ function HomePage() {
                   style={{ minHeight: '60vh', height: '100%' }}
                   maxBounds={maxBounds}
                   maxBoundsViscosity={1}
+                  key={slopes.toString()}
                 >
                   {/*<TileLayer
             nowrap={true}
@@ -133,7 +129,7 @@ function HomePage() {
                   {waypoints &&
                     waypoints.map(waypoint => (
                       <Marker
-                        key={waypoint.name}
+                        key={waypoint._id}
                         position={waypoint.coordinates}
                       >
                         <Popup>
@@ -172,11 +168,12 @@ function HomePage() {
                   {slopes &&
                     slopes.map(slope => (
                       <Polyline
-                        key={slope.id}
+                        key={slope._id}
                         pathOptions={
                           slope.selected
                             ? {
                                 color: colorMap[slope.difficultyLevel],
+                                opacity:'1',
                                 weight: '15',
                               }
                             : {
@@ -202,7 +199,7 @@ function HomePage() {
               <Paper variant='outlined' sx={{ m: 1, height: '100%' }}>
                 <Container sx={{ p: 3 }}>
                   <Sidebar
-                    selectSlopeOnMap={selectSlopeOnMap}
+                    selectSlopesOnMap={selectSlopesOnMap}
                     clearSlopesOnMap={clearSlopesOnMap}
                     waypoints={waypoints}
                     startingPoint={startingPoint}
