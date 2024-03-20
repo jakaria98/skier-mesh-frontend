@@ -13,7 +13,7 @@ function App() {
     return (
         <div className="App">
             <main>
-                <CustomNavbar />
+                
                 <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={<LoginPage />} />
