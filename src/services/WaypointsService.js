@@ -10,7 +10,13 @@ const getAllPaths = (data) => {
     return result;
 };
 
+const getShortestPath = (data) => {
+    const result = axios.get(`${API_URL}/shortestPath/${data.startId}/${data.endId}`);
+    return result;
+};
+
 export default {
     getWaypoints,
     getAllPaths,
+    getShortestPath
 };
