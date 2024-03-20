@@ -42,17 +42,14 @@ import Container from '@mui/material/Container';
 function PathDetail({ path }) {
     const modifiedPathArray = [];
     if (!Array.isArray(path)) {
-      const pathArray0 = path.slopes;
+        const pathArray0 = path.slopes;
         for (let i = 0; i < pathArray0.length; i++) {
-            if (i % 2 === 0) {
-                modifiedPathArray.push('');
-            }
+            modifiedPathArray.push(' ');
             modifiedPathArray.push(pathArray0[i]);
         }
     }
     // Check if path is an array or not
     const pathArray = Array.isArray(path) ? path : modifiedPathArray;
-    console.log(pathArray);
 
     return (
         <List

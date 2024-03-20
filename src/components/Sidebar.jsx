@@ -120,6 +120,78 @@ const Sidebar = ({
                 </Button>
                 <Button
                     sx={{ m: 1, ml: 0 }}
+                    variant={startingPoint && destination ? 'contained' : 'disabled'}
+                    onClick={() => {
+                        clearSlopesOnMap();
+                        WaypointsService.getShortestPath({
+                            startId: startingPoint._id,
+                            endId: destination._id,
+                        })
+                            .then((r) => {
+                                setNumOnDisplay(0);
+                                setPaths(r.data);
+                            })
+                            .catch((error) => console.log(error));
+                    }}
+                >
+                    Fastest Path
+                </Button>
+                <Button
+                    sx={{ m: 1, ml: 0 }}
+                    variant={startingPoint && destination ? 'contained' : 'disabled'}
+                    onClick={() => {
+                        clearSlopesOnMap();
+                        WaypointsService.getShortestPath({
+                            startId: startingPoint._id,
+                            endId: destination._id,
+                        })
+                            .then((r) => {
+                                setNumOnDisplay(0);
+                                setPaths(r.data);
+                            })
+                            .catch((error) => console.log(error));
+                    }}
+                >
+                    Easiest Path
+                </Button>
+                <Button
+                    sx={{ m: 1, ml: 0 }}
+                    variant={startingPoint && destination ? 'contained' : 'disabled'}
+                    onClick={() => {
+                        clearSlopesOnMap();
+                        WaypointsService.getShortestPath({
+                            startId: startingPoint._id,
+                            endId: destination._id,
+                        })
+                            .then((r) => {
+                                setNumOnDisplay(0);
+                                setPaths(r.data);
+                            })
+                            .catch((error) => console.log(error));
+                    }}
+                >
+                    Minimum Lift Usage
+                </Button>
+                <Button
+                    sx={{ m: 1, ml: 0 }}
+                    variant={startingPoint && destination ? 'contained' : 'disabled'}
+                    onClick={() => {
+                        clearSlopesOnMap();
+                        WaypointsService.getShortestPath({
+                            startId: startingPoint._id,
+                            endId: destination._id,
+                        })
+                            .then((r) => {
+                                setNumOnDisplay(0);
+                                setPaths(r.data);
+                            })
+                            .catch((error) => console.log(error));
+                    }}
+                >
+                    Most Scenic
+                </Button>
+                <Button
+                    sx={{ m: 1, ml: 0 }}
                     variant={startingPoint || destination ? 'outlined' : 'disabled'}
                     onClick={() => {
                         setStartingPoint(null);
@@ -151,15 +223,12 @@ const Sidebar = ({
                         )}
                     </Tabs>
                 </Box>
-                {paths && Array.isArray(paths) ? (
-                    paths.map(
-                        (path, index) =>
-                            numOnDisplay == index && <PathDetail path={path} key={path._id} />
-                    )
-                ) : (
-                    console.log(paths),
-                    <PathDetail path={paths} />
-                )}
+                {paths && Array.isArray(paths)
+                    ? paths.map(
+                          (path, index) =>
+                              numOnDisplay == index && <PathDetail path={path} key={path._id} />
+                      )
+                    : (console.log(paths), (<PathDetail path={paths} />))}
             </Grid>
         </Grid>
     );
