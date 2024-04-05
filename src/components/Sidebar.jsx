@@ -178,8 +178,8 @@ const Sidebar = ({
           onClick={() => {
             clearSlopesAndLiftsOnMap()
             WaypointsService.getShortestPath({
-              startId: startingPoint._id,
-              endId: destination._id,
+              startWaypoint: startingPoint._id,
+              endWaypoint: destination._id,
             })
               .then(r => {
                 setPathsTitle(
@@ -198,9 +198,9 @@ const Sidebar = ({
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
             clearSlopesAndLiftsOnMap()
-            WaypointsService.getShortestPath({
-              startId: startingPoint._id,
-              endId: destination._id,
+            WaypointsService.getEasiestPath({
+              startWaypoint: startingPoint._id,
+              endWaypoint: destination._id,
             })
               .then(r => {
                 setPathsTitle(
@@ -212,14 +212,14 @@ const Sidebar = ({
               .catch(error => console.log(error))
           }}
         >
-          Fastest Path
+          Easiest Path
         </Button>
         <Button
           sx={{ m: 1, ml: 0 }}
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
             clearSlopesAndLiftsOnMap()
-            WaypointsService.getAllPathByDifficultyLevel({
+            WaypointsService.getLongestPath({
               startWaypoint: startingPoint._id,
               endWaypoint: destination._id,
               level1: levelsShown[0],
@@ -236,14 +236,14 @@ const Sidebar = ({
               .catch(error => console.log(error))
           }}
         >
-          Easiest Path
+          Longest Path
         </Button>
         <Button
           sx={{ m: 1, ml: 0 }}
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
             clearSlopesAndLiftsOnMap()
-            WaypointsService.getAllPathByDifficultyLevel({
+            WaypointsService.getMinLiftUsagePath({
               startWaypoint: startingPoint._id,
               endWaypoint: destination._id,
               level1: levelsShown[0],
