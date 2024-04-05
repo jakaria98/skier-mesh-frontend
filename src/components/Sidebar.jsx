@@ -23,8 +23,8 @@ import Box from '@mui/material/Box'
 import Checkbox from '@mui/material/Checkbox'
 
 const Sidebar = ({
-  selectSlopesOnMap,
-  clearSlopesOnMap,
+  selectSlopesAndLiftsOnMap,
+  clearSlopesAndLiftsOnMap,
   waypoints,
   startingPoint,
   setStartingPoint,
@@ -47,12 +47,12 @@ const Sidebar = ({
         modifiedPathArray.push(pathArray0[i])
       }
     }
-    if (paths && paths[numOnDisplay]) {
-      selectSlopesOnMap(
+    if (paths && paths[numOnDisplay] && paths!='Nothing to show') {
+      selectSlopesAndLiftsOnMap(
         paths[numOnDisplay].filter((item, index) => index % 2 == 1)
       )
     } else {
-      selectSlopesOnMap(
+      selectSlopesAndLiftsOnMap(
         modifiedPathArray.filter((item, index) => index % 2 == 1)
       )
     }
@@ -104,7 +104,7 @@ const Sidebar = ({
       </Grid>
 
       <Grid item xs={12}>
-        <Box sx={{ml:1}}>
+        <Box sx={{ ml: 1 }}>
           Levels:
           <Checkbox
             checked={levelsShown[0]}
@@ -115,7 +115,7 @@ const Sidebar = ({
               },
             }}
             onChange={() => {
-                setLevelsShown(levelsShown.map((s, i) => (i == 0) ? !s : s ))
+              setLevelsShown(levelsShown.map((s, i) => (i == 0 ? !s : s)))
             }}
           />
           <Checkbox
@@ -127,7 +127,7 @@ const Sidebar = ({
               },
             }}
             onChange={() => {
-                setLevelsShown(levelsShown.map((s, i) => (i == 1) ? !s : s ))
+              setLevelsShown(levelsShown.map((s, i) => (i == 1 ? !s : s)))
             }}
           />
           <Checkbox
@@ -139,7 +139,7 @@ const Sidebar = ({
               },
             }}
             onChange={() => {
-                setLevelsShown(levelsShown.map((s, i) => (i == 2) ? !s : s ))
+              setLevelsShown(levelsShown.map((s, i) => (i == 2 ? !s : s)))
             }}
           />
         </Box>
@@ -150,14 +150,19 @@ const Sidebar = ({
           sx={{ m: 1, ml: 0 }}
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
-            clearSlopesOnMap()
-            WaypointsService.getAllPaths({
-              startId: startingPoint._id,
-              endId: destination._id,
+            clearSlopesAndLiftsOnMap()
+            WaypointsService.getAllPathByDifficultyLevel({
+              startWaypoint: startingPoint._id,
+              endWaypoint: destination._id,
+              level1: levelsShown[0],
+              level2: levelsShown[1],
+              level3: levelsShown[2],
             })
               .then(r => {
-                setPathsTitle(`Showing paths from ${startingPoint.name} to ${destination.name}`)
-                setNumOnDisplay(0)  
+                setPathsTitle(
+                  `Showing paths from ${startingPoint.name} to ${destination.name}`
+                )
+                setNumOnDisplay(0)
                 setPaths(r.data)
               })
               .catch(error => console.log(error))
@@ -169,12 +174,15 @@ const Sidebar = ({
           sx={{ m: 1, ml: 0 }}
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
-            clearSlopesOnMap()
+            clearSlopesAndLiftsOnMap()
             WaypointsService.getShortestPath({
               startId: startingPoint._id,
               endId: destination._id,
             })
               .then(r => {
+                setPathsTitle(
+                  `Showing paths from ${startingPoint.name} to ${destination.name}`
+                )
                 setNumOnDisplay(0)
                 setPaths(r.data)
               })
@@ -187,12 +195,15 @@ const Sidebar = ({
           sx={{ m: 1, ml: 0 }}
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
-            clearSlopesOnMap()
+            clearSlopesAndLiftsOnMap()
             WaypointsService.getShortestPath({
               startId: startingPoint._id,
               endId: destination._id,
             })
               .then(r => {
+                setPathsTitle(
+                  `Showing paths from ${startingPoint.name} to ${destination.name}`
+                )
                 setNumOnDisplay(0)
                 setPaths(r.data)
               })
@@ -205,14 +216,20 @@ const Sidebar = ({
           sx={{ m: 1, ml: 0 }}
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
-            clearSlopesOnMap()
-            WaypointsService.getShortestPath({
-              startId: startingPoint._id,
-              endId: destination._id,
+            clearSlopesAndLiftsOnMap()
+            WaypointsService.getAllPathByDifficultyLevel({
+              startWaypoint: startingPoint._id,
+              endWaypoint: destination._id,
+              level1: levelsShown[0],
+              level2: levelsShown[1],
+              level3: levelsShown[2],
             })
               .then(r => {
+                setPathsTitle(
+                  `Showing paths from ${startingPoint.name} to ${destination.name}`
+                )
                 setNumOnDisplay(0)
-                setPaths(r.data)
+                setPaths(r.data.slice(0, 1))
               })
               .catch(error => console.log(error))
           }}
@@ -223,14 +240,24 @@ const Sidebar = ({
           sx={{ m: 1, ml: 0 }}
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
-            clearSlopesOnMap()
-            WaypointsService.getAllPaths({
-              startId: startingPoint._id,
-              endId: destination._id,
+            clearSlopesAndLiftsOnMap()
+            WaypointsService.getAllPathByDifficultyLevel({
+              startWaypoint: startingPoint._id,
+              endWaypoint: destination._id,
+              level1: levelsShown[0],
+              level2: levelsShown[1],
+              level3: levelsShown[2],
             })
               .then(r => {
+                setPathsTitle(
+                  `Showing paths from ${startingPoint.name} to ${destination.name}`
+                )
                 setNumOnDisplay(0)
-                setPaths(r.data.sort((a, b) => a.lifts.length - b.lifts.length).slice(0, 1))
+                setPaths(
+                  r.data
+                    .sort((a, b) => a.filter((item, index) => index % 2 == 1).filter(item => 'liftID' in item).length - b.filter((item, index) => index % 2 == 1).filter(item => 'liftID' in item).length)
+                    .slice(0, 1)
+                )
               })
               .catch(error => console.log(error))
           }}
@@ -241,12 +268,15 @@ const Sidebar = ({
           sx={{ m: 1, ml: 0 }}
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
-            clearSlopesOnMap()
+            clearSlopesAndLiftsOnMap()
             WaypointsService.getShortestPath({
               startId: startingPoint._id,
               endId: destination._id,
             })
               .then(r => {
+                setPathsTitle(
+                  `Showing paths from ${startingPoint.name} to ${destination.name}`
+                )
                 setPaths(r.data)
                 setNumOnDisplay(0)
               })
@@ -259,9 +289,10 @@ const Sidebar = ({
           sx={{ m: 1, ml: 0 }}
           variant={startingPoint || destination ? 'outlined' : 'disabled'}
           onClick={() => {
+            setPathsTitle('')
             setStartingPoint(null)
             setDestination(null)
-            clearSlopesOnMap()
+            clearSlopesAndLiftsOnMap()
             setPaths([])
           }}
         >
@@ -270,12 +301,11 @@ const Sidebar = ({
       </Grid>
       <Grid item xs={12}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Box sx={{m:1}}>{pathsTitle}</Box>
+          <Box sx={{ m: 1 }}>{pathsTitle}</Box>
           <Tabs
-            key={0}
             value={numOnDisplay}
             onChange={(e, tabIndex) => {
-              clearSlopesOnMap()
+              clearSlopesAndLiftsOnMap()
               setNumOnDisplay(tabIndex)
             }}
             variant='scrollable'
@@ -296,7 +326,7 @@ const Sidebar = ({
               numOnDisplay == index && <PathDetail path={path} key={path._id} />
           )
         ) : (
-          <PathDetail path={paths} />
+          <PathDetail path={paths} key={paths.toString()} />
         )}
       </Grid>
     </Grid>

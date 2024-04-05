@@ -74,21 +74,27 @@ function HomePage() {
   useEffect(() => {
     LiftsService.getLifts()
       .then(r => {
-        setLifts(r.data.map(s => ({ ...s, selected: 0 })))
+        setLifts(r.data.map(l => ({ ...l, selected: 0 })))
       })
       .catch(console.error)
   }, [])
 
-  const selectSlopesOnMap = async targets => {
+  const selectSlopesAndLiftsOnMap = async targets => {
     const ids = targets.map(t => t._id)
     await setSlopes(
       slopes.map(slope =>
         ids.includes(slope._id) ? { ...slope, selected: 1 } : slope
       )
     )
+    await setLifts(
+      lifts.map(lift =>
+        ids.includes(lift._id) ? { ...lift, selected: 1 } : lift
+      )
+    )
   }
-  const clearSlopesOnMap = async () => {
+  const clearSlopesAndLiftsOnMap = async () => {
     await setSlopes(slopes.map(s => ({ ...s, selected: 0 })))
+    await setLifts(lifts.map(l => ({ ...l, selected: 0 })))
   }
 
   function createCurvedLine(start, end) {
@@ -224,7 +230,7 @@ function HomePage() {
                     ))}
                   {slopes &&
                     slopes.map(slope => (
-                      levelsShown[difficultyMap[slope.difficultyLevel]] ? <Polyline
+                      <Polyline
                         key={slope._id}
                         pathOptions={
                           slope.selected
@@ -248,7 +254,6 @@ function HomePage() {
                           <SlopeDetail slope={slope} />
                         </Popup>
                       </Polyline>
-                      : null
                     ))}
                 </MapContainer>
               </Paper>
@@ -257,8 +262,8 @@ function HomePage() {
               <Paper variant='outlined' sx={{ m: 1, height: '100%' }}>
                 <Container sx={{ p: 3 }}>
                   <Sidebar
-                    selectSlopesOnMap={selectSlopesOnMap}
-                    clearSlopesOnMap={clearSlopesOnMap}
+                    selectSlopesAndLiftsOnMap={selectSlopesAndLiftsOnMap}
+                    clearSlopesAndLiftsOnMap={clearSlopesAndLiftsOnMap}
                     waypoints={waypoints}
                     startingPoint={startingPoint}
                     setStartingPoint={setStartingPoint}
