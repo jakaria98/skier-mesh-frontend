@@ -27,8 +27,8 @@ import LiftsService from '../services/LiftsService'
 
 function HomePage() {
   const maxBounds = [
-    [27, 86],
-    [28, 87],
+    [27.1, 85.6],
+    [28.3, 87.3],
   ]
   const center = [
     (maxBounds[0][0] + maxBounds[1][0]) / 2,
@@ -144,7 +144,8 @@ function HomePage() {
           />*/}
                   <ImageOverlay
                     url={
-                      'https://jamesniehues.com/cdn/shop/products/199.1_CottonwoodCanyons2001Book_Feb_1_19.jpg'
+                      //'https://jamesniehues.com/cdn/shop/products/199.1_CottonwoodCanyons2001Book_Feb_1_19.jpg'
+                      '../public/map.png'
                     }
                     bounds={maxBounds}
                     opacity={1}

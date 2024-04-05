@@ -224,13 +224,13 @@ const Sidebar = ({
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
             clearSlopesOnMap()
-            WaypointsService.getShortestPath({
+            WaypointsService.getAllPaths({
               startId: startingPoint._id,
               endId: destination._id,
             })
               .then(r => {
                 setNumOnDisplay(0)
-                setPaths(r.data)
+                setPaths(r.data.sort((a, b) => a.lifts.length - b.lifts.length).slice(0, 1))
               })
               .catch(error => console.log(error))
           }}
@@ -247,8 +247,8 @@ const Sidebar = ({
               endId: destination._id,
             })
               .then(r => {
+                setPaths(r.data)
                 setNumOnDisplay(0)
-                setPaths(r.data.sort((a, b) => a.lifts.length - b.lifts.length))
               })
               .catch(error => console.log(error))
           }}
