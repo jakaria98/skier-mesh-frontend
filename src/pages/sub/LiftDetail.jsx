@@ -7,7 +7,7 @@ function LiftDetail({ lift }) {
       <p>Type: {lift.type}</p>
       <p>Status: {lift.status}</p>
       <p>Capacity: {lift.capacity} Pers./h</p>
-      <p>Available time: {lift.schedule.open} - {lift.schedule.close}</p>
+      <p>Travel Time: {lift.travelTime}</p>
       {/* Add more details as needed */}
     </div>
   );
