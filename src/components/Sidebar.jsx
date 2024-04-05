@@ -38,7 +38,6 @@ const Sidebar = ({
   const [pathsTitle, setPathsTitle] = useState('')
 
   useEffect(() => {
-    console.log(typeof paths)
     const modifiedPathArray = []
     if (!Array.isArray(paths)) {
       const pathArray0 = paths.slopes
@@ -326,7 +325,8 @@ const Sidebar = ({
         {paths && Array.isArray(paths) ? (
           paths.map(
             (path, index) =>
-              numOnDisplay == index && <PathDetail path={path} key={path._id} />
+              numOnDisplay == index && <PathDetail path={path} key={path._id
+              } />
           )
         ) : (
           <PathDetail path={paths} key={paths.toString()} />
