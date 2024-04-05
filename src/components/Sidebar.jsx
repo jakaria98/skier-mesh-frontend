@@ -244,7 +244,7 @@ const Sidebar = ({
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
             clearSlopesAndLiftsOnMap()
-            WaypointsService.getAllPathByDifficultyLevel({
+            WaypointsService.getMinLiftUsagePath({
               startWaypoint: startingPoint._id,
               endWaypoint: destination._id,
               level1: levelsShown[0],

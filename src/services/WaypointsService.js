@@ -35,11 +35,19 @@ const getEasiestPath = (data) => {
     return result;
 };
 
+const getMinLiftUsagePath = (data) => {
+    const result = axios.post(`${API_URL}/minLiftUsagePath`, data);
+    console.log(data);
+    console.log(result);
+    return result;
+};
+
 export default {
     getWaypoints,
     getAllPaths,
     getShortestPath,
     getAllPathByDifficultyLevel,
     getEasiestPath,
-    getLongestPath
+    getLongestPath,
+    getMinLiftUsagePath
 };
