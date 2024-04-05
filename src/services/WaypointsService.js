@@ -15,7 +15,23 @@ const getAllPathByDifficultyLevel = (data) => {
 };
 
 const getShortestPath = (data) => {
-    const result = axios.get(`${API_URL}/shortestPath/${data.startId}/${data.endId}`);
+    const result = axios.post(`${API_URL}/shortestPathbyTime`, data);
+    console.log(data);
+    console.log(result);
+    return result;
+};
+
+const getLongestPath = (data) => {
+    const result = axios.post(`${API_URL}/longestPathByTime`, data);
+    console.log(data);
+    console.log(result);
+    return result;
+};
+
+const getEasiestPath = (data) => {
+    const result = axios.post(`${API_URL}/easiestPath`, data);
+    console.log(data);
+    console.log(result);
     return result;
 };
 
@@ -23,5 +39,7 @@ export default {
     getWaypoints,
     getAllPaths,
     getShortestPath,
-    getAllPathByDifficultyLevel
+    getAllPathByDifficultyLevel,
+    getEasiestPath,
+    getLongestPath
 };
