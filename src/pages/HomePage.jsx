@@ -131,14 +131,14 @@ function HomePage() {
       <Stack justifyContent={'center'} alignItems={'center'}>
         <Header />
         <main style={{ width: '100%' }}>
-          <Grid container rowSpacing={1} sx={{ minHeight: '60vh', p: 5 }}>
+          <Grid container rowSpacing={1} sx={{ minHeight: '85vh', p: 5 }}>
             <Grid item xs={12} md={8}>
               <Paper variant='outlined' sx={{ m: 1, height: '100%' }}>
                 <MapContainer
                   center={center}
                   zoom={9.5}
                   scrollWheelZoom={true}
-                  style={{ minHeight: '60vh', height: '100%' }}
+                  style={{ minHeight: '85vh', height: '100%' }}
                   maxBounds={maxBounds}
                   maxBoundsViscosity={1}
                   key={slopes.toString()}

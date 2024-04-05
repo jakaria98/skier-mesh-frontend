@@ -61,6 +61,9 @@ const Sidebar = ({
   return (
     <Grid container spacing={1} alignItems='center'>
       <Grid item xs={12}>
+        <Typography variant='h2' component='h4' sx={{ m: 1 }}>
+          Skier Mesh
+        </Typography>
         <Typography variant='h4' component='h4' sx={{ m: 1 }}>
           Navigation
         </Typography>
