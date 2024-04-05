@@ -47,11 +47,17 @@ function HomePage() {
     Level2: 'red',
     Level3: 'black',
   }
+  const difficultyMap = {
+    Level1: 0,
+    Level2: 1,
+    Level3: 2,
+  }
   const [waypoints, setWaypoints] = useState([])
   const [slopes, setSlopes] = useState([])
   const [lifts, setLifts] = useState([])
   const [startingPoint, setStartingPoint] = useState()
   const [destination, setDestination] = useState()
+  const [levelsShown, setLevelsShown] = useState([true, true, true])
   useEffect(() => {
     WaypointsService.getWaypoints()
       .then(r => setWaypoints(r.data))
@@ -61,14 +67,14 @@ function HomePage() {
   useEffect(() => {
     SlopesService.getSlopes()
       .then(r => {
-        setSlopes(r.data.map(s => ({ ...s, selected: false })))
+        setSlopes(r.data.map(s => ({ ...s, selected: 0 })))
       })
       .catch(console.error)
   }, [])
   useEffect(() => {
     LiftsService.getLifts()
       .then(r => {
-        setLifts(r.data.map(s => ({ ...s, selected: false })))
+        setLifts(r.data.map(s => ({ ...s, selected: 0 })))
       })
       .catch(console.error)
   }, [])
@@ -77,12 +83,12 @@ function HomePage() {
     const ids = targets.map(t => t._id)
     await setSlopes(
       slopes.map(slope =>
-        ids.includes(slope._id) ? { ...slope, selected: true } : slope
+        ids.includes(slope._id) ? { ...slope, selected: 1 } : slope
       )
     )
   }
   const clearSlopesOnMap = async () => {
-    await setSlopes(slopes.map(s => ({ ...s, selected: false })))
+    await setSlopes(slopes.map(s => ({ ...s, selected: 0 })))
   }
 
   function createCurvedLine(start, end) {
@@ -197,31 +203,27 @@ function HomePage() {
                         <Popup style={{ display: 'inline-block' }}>
                           <LiftDetail lift={lift} />
                         </Popup>
-                          <Marker
-                            icon={liftIcon}
-                            position={[
-                              (lift.waypoints[0].coordinates[0] +
-                                lift.waypoints[1].coordinates[0]) /
-                                2,
-                              (lift.waypoints[0].coordinates[1] +
-                                lift.waypoints[1].coordinates[1]) /
-                                2,
-                            ]}
-                            opacity={
-                              lift.selected
-                                ? 1
-                                : 0.5
-                            }
-                          >
-                            <Popup style={{ display: 'inline-block' }}>
-                              <LiftDetail lift={lift} />
-                            </Popup>
-                          </Marker>
+                        <Marker
+                          icon={liftIcon}
+                          position={[
+                            (lift.waypoints[0].coordinates[0] +
+                              lift.waypoints[1].coordinates[0]) /
+                              2,
+                            (lift.waypoints[0].coordinates[1] +
+                              lift.waypoints[1].coordinates[1]) /
+                              2,
+                          ]}
+                          opacity={lift.selected ? 1 : 0.5}
+                        >
+                          <Popup style={{ display: 'inline-block' }}>
+                            <LiftDetail lift={lift} />
+                          </Popup>
+                        </Marker>
                       </Polyline>
                     ))}
                   {slopes &&
                     slopes.map(slope => (
-                      <Polyline
+                      levelsShown[difficultyMap[slope.difficultyLevel]] ? <Polyline
                         key={slope._id}
                         pathOptions={
                           slope.selected
@@ -245,6 +247,7 @@ function HomePage() {
                           <SlopeDetail slope={slope} />
                         </Popup>
                       </Polyline>
+                      : null
                     ))}
                 </MapContainer>
               </Paper>
@@ -260,6 +263,8 @@ function HomePage() {
                     setStartingPoint={setStartingPoint}
                     destination={destination}
                     setDestination={setDestination}
+                    levelsShown={levelsShown}
+                    setLevelsShown={setLevelsShown}
                   />
                 </Container>
               </Paper>
