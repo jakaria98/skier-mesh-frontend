@@ -77,7 +77,6 @@ function PathDetail({ path }) {
             modifiedPathArray.push(pathArray0[i]);
         }
     }
-    // Check if path is an array or not
     const pathArray = Array.isArray(path) ? path : modifiedPathArray;
 
     return (

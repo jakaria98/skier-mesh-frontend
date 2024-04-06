@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-// Assume AuthService handles communication with your backend
-// import AuthService from '../services/AuthService';
 
 function RegisterPage() {
     const [username, setUsername] = useState('');
@@ -11,8 +9,6 @@ function RegisterPage() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // Call to AuthService for registration logic
-        // await AuthService.register(username, email, password);
         console.log("Registration submitted:", username, email, password);
     };
 
