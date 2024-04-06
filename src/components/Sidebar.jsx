@@ -48,11 +48,7 @@ const Sidebar = ({
     }
     if (paths && paths[numOnDisplay] && paths!='Nothing to show') {
       selectSlopesAndLiftsOnMap(
-        paths[numOnDisplay].filter((item, index) => index % 2 == 1)
-      )
-    } else {
-      selectSlopesAndLiftsOnMap(
-        modifiedPathArray.filter((item, index) => index % 2 == 1)
+        paths[numOnDisplay]
       )
     }
   }, [paths, numOnDisplay])
@@ -165,7 +161,7 @@ const Sidebar = ({
                   `Showing paths from ${startingPoint.name} to ${destination.name}`
                 )
                 setNumOnDisplay(0)
-                setPaths(r.data)
+                setPaths(r.data.map(path => path.filter((item, index) => index % 2 == 1)))
               })
               .catch(error => console.log(error))
           }}
@@ -177,16 +173,18 @@ const Sidebar = ({
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
             clearSlopesAndLiftsOnMap()
-            WaypointsService.getShortestPath({
+            WaypointsService.getShortestPathByTime({
               startWaypoint: startingPoint._id,
               endWaypoint: destination._id,
             })
               .then(r => {
+                console.log(r.data)
+                console.log('aaaaaa')
                 setPathsTitle(
                   `Showing paths from ${startingPoint.name} to ${destination.name}`
                 )
                 setNumOnDisplay(0)
-                setPaths(r.data)
+                setPaths([r.data])
               })
               .catch(error => console.log(error))
           }}
@@ -198,16 +196,19 @@ const Sidebar = ({
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
             clearSlopesAndLiftsOnMap()
-            WaypointsService.getEasiestPath({
+            WaypointsService.getAllPathByDifficultyLevel({
               startWaypoint: startingPoint._id,
               endWaypoint: destination._id,
+              level1: levelsShown[0],
+              level2: levelsShown[1],
+              level3: levelsShown[2],
             })
               .then(r => {
                 setPathsTitle(
                   `Showing paths from ${startingPoint.name} to ${destination.name}`
                 )
                 setNumOnDisplay(0)
-                setPaths(r.data)
+                setPaths(r.data.map(path => path.filter((item, index) => index % 2 == 1)).slice(0, 1))
               })
               .catch(error => console.log(error))
           }}
@@ -306,20 +307,18 @@ const Sidebar = ({
           <Box sx={{ m: 1 }}>{pathsTitle}</Box>
           <Tabs
             value={numOnDisplay}
-            onChange={(e, tabIndex) => {
-              clearSlopesAndLiftsOnMap()
+            onChange={async(e, tabIndex) => {
+              await clearSlopesAndLiftsOnMap()
               setNumOnDisplay(tabIndex)
             }}
             variant='scrollable'
             scrollButtons='auto'
           >
-            {paths && Array.isArray(paths) ? (
+            {
               paths.map((path, index) => (
-                <Tab label={`Path ${index}`} key={path._id} />
+                <Tab label={`Path ${index + 1}`} key={path._id} />
               ))
-            ) : (
-              <Tab label={`Path`} />
-            )}
+            }
           </Tabs>
         </Box>
         {paths && Array.isArray(paths) ? (
