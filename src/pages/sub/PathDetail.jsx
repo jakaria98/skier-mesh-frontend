@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 
 function PathDetail({ path }) {
+    console.log(path)
   if (path != 'Nothing to show')
     return (
       <List
