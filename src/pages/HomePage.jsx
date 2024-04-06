@@ -151,7 +151,7 @@ function HomePage() {
                   <ImageOverlay
                     url={
                       //'https://jamesniehues.com/cdn/shop/products/199.1_CottonwoodCanyons2001Book_Feb_1_19.jpg'
-                      '../public/map.png'
+                      '/map.png'
                     }
                     bounds={maxBounds}
                     opacity={1}
