@@ -161,7 +161,7 @@ const Sidebar = ({
             })
               .then(r => {
                 setPathsTitle(
-                  `Showing paths from ${startingPoint.name} to ${destination.name}`
+                  `Showing all paths from ${startingPoint.name} to ${destination.name}`
                 )
                 setNumOnDisplay(0)
                 setPaths(r.data.map(path => path.filter((item, index) => index % 2 == 1)))
@@ -182,7 +182,7 @@ const Sidebar = ({
             })
               .then(r => {
                 setPathsTitle(
-                  `Showing paths from ${startingPoint.name} to ${destination.name}`
+                  `Showing the shortest path from ${startingPoint.name} to ${destination.name}`
                 )
                 setNumOnDisplay(0)
                 setPaths([r.data.filter((item, index) => index % 2 == 1)])
@@ -203,7 +203,7 @@ const Sidebar = ({
             })
               .then(r => {
                 setPathsTitle(
-                  `Showing paths from ${startingPoint.name} to ${destination.name}`
+                  `Showing the easiest path from ${startingPoint.name} to ${destination.name}`
                 )
                 setNumOnDisplay(0)
                 setPaths([r.data.filter((item, index) => index % 3 == 1)])
@@ -224,7 +224,7 @@ const Sidebar = ({
             })
               .then(r => {
                 setPathsTitle(
-                  `Showing paths from ${startingPoint.name} to ${destination.name}`
+                  `Showing the longest path from ${startingPoint.name} to ${destination.name}`
                 )
                 setNumOnDisplay(0)
                 setPaths([r.data.filter((item, index) => index % 2 == 1)])
@@ -248,7 +248,7 @@ const Sidebar = ({
             })
               .then(r => {
                 setPathsTitle(
-                  `Showing paths from ${startingPoint.name} to ${destination.name}`
+                  `Showing the path with minimum lift usage from ${startingPoint.name} to ${destination.name}`
                 )
                 setNumOnDisplay(0)
                 setPaths(r.data.map(path => path.filter((item, index) => index % 2 == 1)).sort((a, b) => a.filter((item, index) => index % 2 == 1).filter(item => 'liftID' in item).length - b.filter((item, index) => index % 2 == 1).filter(item => 'liftID' in item).length)
