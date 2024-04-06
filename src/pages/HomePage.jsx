@@ -190,13 +190,13 @@ function HomePage() {
                         pathOptions={
                           lift.selected
                             ? {
-                                color: 'yellow',
+                                color: 'green',
                                 opacity: '1',
                                 weight: '8',
                                 dashArray: '15,10',
                               }
                             : {
-                                color: 'yellow',
+                                color: 'green',
                                 opacity: '0.5',
                                 weight: '5',
                                 dashArray: '15,10',
