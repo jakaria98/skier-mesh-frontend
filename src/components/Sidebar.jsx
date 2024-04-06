@@ -206,7 +206,7 @@ const Sidebar = ({
                   `Showing paths from ${startingPoint.name} to ${destination.name}`
                 )
                 setNumOnDisplay(0)
-                setPaths([r.data.filter((item, index) => index % 2 == 1)])
+                setPaths([r.data.filter((item, index) => index % 3 == 1)])
               })
               .catch(error => console.log(error))
           }}
