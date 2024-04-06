@@ -184,7 +184,7 @@ const Sidebar = ({
                   `Showing paths from ${startingPoint.name} to ${destination.name}`
                 )
                 setNumOnDisplay(0)
-                setPaths([r.data])
+                setPaths([r.data.filter((item, index) => index % 2 == 1)])
               })
               .catch(error => console.log(error))
           }}
@@ -244,7 +244,7 @@ const Sidebar = ({
           variant={startingPoint && destination ? 'contained' : 'disabled'}
           onClick={() => {
             clearSlopesAndLiftsOnMap()
-            WaypointsService.getMinLiftUsagePath({
+            WaypointsService.getAllPathByDifficultyLevel({
               startWaypoint: startingPoint._id,
               endWaypoint: destination._id,
               level1: levelsShown[0],
@@ -256,11 +256,8 @@ const Sidebar = ({
                   `Showing paths from ${startingPoint.name} to ${destination.name}`
                 )
                 setNumOnDisplay(0)
-                setPaths(
-                  r.data
-                    .sort((a, b) => a.filter((item, index) => index % 2 == 1).filter(item => 'liftID' in item).length - b.filter((item, index) => index % 2 == 1).filter(item => 'liftID' in item).length)
-                    .slice(0, 1)
-                )
+                setPaths(r.data.map(path => path.filter((item, index) => index % 2 == 1)).sort((a, b) => a.filter((item, index) => index % 2 == 1).filter(item => 'liftID' in item).length - b.filter((item, index) => index % 2 == 1).filter(item => 'liftID' in item).length)
+                .slice(0, 1))
               })
               .catch(error => console.log(error))
           }}
