@@ -113,6 +113,7 @@ const Sidebar = ({
               },
             }}
             onChange={() => {
+                if(levelsShown[0] && !levelsShown[1] && !levelsShown[2])return;
               setLevelsShown(levelsShown.map((s, i) => (i == 0 ? !s : s)))
             }}
           />
@@ -125,6 +126,7 @@ const Sidebar = ({
               },
             }}
             onChange={() => {
+                if(levelsShown[1] && !levelsShown[0] && !levelsShown[2])return;
               setLevelsShown(levelsShown.map((s, i) => (i == 1 ? !s : s)))
             }}
           />
@@ -137,6 +139,7 @@ const Sidebar = ({
               },
             }}
             onChange={() => {
+                if(levelsShown[2] && !levelsShown[0] && !levelsShown[1])return;
               setLevelsShown(levelsShown.map((s, i) => (i == 2 ? !s : s)))
             }}
           />
@@ -178,18 +181,58 @@ const Sidebar = ({
               endWaypoint: destination._id,
             })
               .then(r => {
-                console.log(r.data)
-                console.log('aaaaaa')
                 setPathsTitle(
                   `Showing paths from ${startingPoint.name} to ${destination.name}`
                 )
                 setNumOnDisplay(0)
-                setPaths([r.data])
+                setPaths([r.data.filter((item, index) => index % 2 == 1)])
               })
               .catch(error => console.log(error))
           }}
         >
           Shortest Path
+        </Button>
+        <Button
+          sx={{ m: 1, ml: 0 }}
+          variant={startingPoint && destination ? 'contained' : 'disabled'}
+          onClick={() => {
+            clearSlopesAndLiftsOnMap()
+            WaypointsService.getEasiestPath({
+              startWaypoint: startingPoint._id,
+              endWaypoint: destination._id,
+            })
+              .then(r => {
+                setPathsTitle(
+                  `Showing paths from ${startingPoint.name} to ${destination.name}`
+                )
+                setNumOnDisplay(0)
+                setPaths([r.data.filter((item, index) => index % 2 == 1)])
+              })
+              .catch(error => console.log(error))
+          }}
+        >
+          Easiest Path
+        </Button>
+        <Button
+          sx={{ m: 1, ml: 0 }}
+          variant={startingPoint && destination ? 'contained' : 'disabled'}
+          onClick={() => {
+            clearSlopesAndLiftsOnMap()
+            WaypointsService.getLongestPathByTime({
+              startWaypoint: startingPoint._id,
+              endWaypoint: destination._id,
+            })
+              .then(r => {
+                setPathsTitle(
+                  `Showing paths from ${startingPoint.name} to ${destination.name}`
+                )
+                setNumOnDisplay(0)
+                setPaths([r.data.filter((item, index) => index % 2 == 1)])
+              })
+              .catch(error => console.log(error))
+          }}
+        >
+          Longest Path
         </Button>
         <Button
           sx={{ m: 1, ml: 0 }}
@@ -208,85 +251,13 @@ const Sidebar = ({
                   `Showing paths from ${startingPoint.name} to ${destination.name}`
                 )
                 setNumOnDisplay(0)
-                setPaths(r.data.map(path => path.filter((item, index) => index % 2 == 1)).slice(0, 1))
-              })
-              .catch(error => console.log(error))
-          }}
-        >
-          Easiest Path
-        </Button>
-        <Button
-          sx={{ m: 1, ml: 0 }}
-          variant={startingPoint && destination ? 'contained' : 'disabled'}
-          onClick={() => {
-            clearSlopesAndLiftsOnMap()
-            WaypointsService.getLongestPath({
-              startWaypoint: startingPoint._id,
-              endWaypoint: destination._id,
-              level1: levelsShown[0],
-              level2: levelsShown[1],
-              level3: levelsShown[2],
-            })
-              .then(r => {
-                setPathsTitle(
-                  `Showing paths from ${startingPoint.name} to ${destination.name}`
-                )
-                setNumOnDisplay(0)
-                setPaths(r.data.slice(0, 1))
-              })
-              .catch(error => console.log(error))
-          }}
-        >
-          Longest Path
-        </Button>
-        <Button
-          sx={{ m: 1, ml: 0 }}
-          variant={startingPoint && destination ? 'contained' : 'disabled'}
-          onClick={() => {
-            clearSlopesAndLiftsOnMap()
-            WaypointsService.getMinLiftUsagePath({
-              startWaypoint: startingPoint._id,
-              endWaypoint: destination._id,
-              level1: levelsShown[0],
-              level2: levelsShown[1],
-              level3: levelsShown[2],
-            })
-              .then(r => {
-                setPathsTitle(
-                  `Showing paths from ${startingPoint.name} to ${destination.name}`
-                )
-                setNumOnDisplay(0)
-                setPaths(
-                  r.data
-                    .sort((a, b) => a.filter((item, index) => index % 2 == 1).filter(item => 'liftID' in item).length - b.filter((item, index) => index % 2 == 1).filter(item => 'liftID' in item).length)
-                    .slice(0, 1)
-                )
+                setPaths(r.data.map(path => path.filter((item, index) => index % 2 == 1)).sort((a, b) => a.filter((item, index) => index % 2 == 1).filter(item => 'liftID' in item).length - b.filter((item, index) => index % 2 == 1).filter(item => 'liftID' in item).length)
+                .slice(0, 1))
               })
               .catch(error => console.log(error))
           }}
         >
           Minimum Lift Usage
-        </Button>
-        <Button
-          sx={{ m: 1, ml: 0 }}
-          variant={startingPoint && destination ? 'contained' : 'disabled'}
-          onClick={() => {
-            clearSlopesAndLiftsOnMap()
-            WaypointsService.getShortestPath({
-              startId: startingPoint._id,
-              endId: destination._id,
-            })
-              .then(r => {
-                setPathsTitle(
-                  `Showing paths from ${startingPoint.name} to ${destination.name}`
-                )
-                setPaths(r.data)
-                setNumOnDisplay(0)
-              })
-              .catch(error => console.log(error))
-          }}
-        >
-          Most Scenic
         </Button>
         <Button
           sx={{ m: 1, ml: 0 }}
