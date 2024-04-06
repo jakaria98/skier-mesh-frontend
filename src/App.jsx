@@ -6,14 +6,14 @@ import ProfilePage from './pages/ProfilePage';
 import SlopesPage from './pages/SlopesPage';
 import LiftsPage from './pages/LiftsPage';
 import SearchPage from './pages/SearchPage';
-import PrivateRoute from './components/PrivateRoute'; // Ensure this is updated for React Router v6
+import PrivateRoute from './components/PrivateRoute';
 import CustomNavbar from './components/CustomNavbar';
 
 function App() {
     return (
         <div className="App">
             <main>
-                
+
                 <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/login" element={<LoginPage />} />
